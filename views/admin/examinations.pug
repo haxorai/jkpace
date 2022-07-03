@@ -1,0 +1,134 @@
+extends admin_layout 
+block content
+    div(class="container mb-4 border border-info pt-3 pb-3")                    
+        h6.text-uppercase.ps-4 Schedule an examination 
+        form(action='/create-exam')
+            div(class="inputContainer")
+                input(type="text" class="input" name="name" required)
+                span(class="label") Name
+                i(class="fa-solid fa-file-signature iconRegister text-primary")
+            div(class="inputContainer")
+                input(type="text" class="input" name="date" required)
+                span(class="label") Date(dd/mm/yyyy)
+                i(class="fa-solid fa-calendar-days iconRegister text-primary")
+            div.date.error
+            div(class="inputContainer")
+                input(type="text" class="input" name="time" required)
+                span(class="label") Time(hh:mm am/pm)
+                i(class="fa-solid fa-clock iconRegister text-primary")
+            div(class="inputContainer")
+                input(type="tel" class="input" name="price" required onkeypress="return number_key(event)")
+                span(class="label") Price
+                i(class="fa-solid fa-indian-rupee-sign iconRegister text-primary")
+            div(class="inputContainer")
+                input(type="tel" class="input" name="topper_prize" required)
+                span(class="label") Topper Prize
+                i(class="fa-solid fa-indian-rupee-sign iconRegister text-primary")
+            div(class="inputContainer")
+                input(type="text" class="input" name="body" required)
+                span(class="label") Body
+                i(class="fa-solid fa-building iconRegister text-primary")
+            div.inputContainer 
+                button(class="btn btn-primary w-100 py-2 mt-2 mb-2 submitButton") Submit
+
+    div.container.border.border-info.mb-3
+        h6.text-uppercase.mt-2 Examinations
+        each exam in exams
+            div(class="row border border-info mt-2 mb-2")
+                div(class="col-sm-12 col-md-7 d-flex p-2")
+                    if exam.body === 'jkssb'
+                        img(class="flex-shrink-0 img-fluid" src="/images/jkssb.png" alt="" style={width: '80px', height: '80px'})
+                    else 
+                        img(class="flex-shrink-0 img-fluid" src="/images/jkpsc.png" alt="" style={width: '80px', height: '80px'})
+                    div(class="text-start ps-4")
+                        h5(class="mb-3 text-uppercase")= exam.name
+                            sup 
+                                i(class="fa-solid fa-indian-rupee-sign")
+                                span.text-primary= exam.price
+                    
+                        i(class="fa-regular fa-money-bill-1 text-primary me-2")
+                        span(class='text-primary text-uppercase me-3') Topper Prize
+                        i(class="fa-solid fa-indian-rupee-sign")= exam.topper_prize
+                    
+                
+                div(class="col-sm-12 col-md-5 d-flex flex-column  align-items-md-end p-2")
+                    
+                    div.text-uppercase
+                        i(class="far fa-calendar-alt text-primary me-2")
+                        - const exam_date = parseInt(exam.date)
+                        - let date = new Date(exam_date);
+                        - const year = date.getFullYear();
+                        - const month = date.getMonth() + 1;
+                        - const day = date.getDate(); 
+                        - date = day.toString()+"/"+month.toString()+"/"+year.toString()
+                        span.me-3=  'Date: '+ date 
+                     
+                        i(class="fa-regular fa-clock text-primary me-2") 
+                        span=  'Time: '+ exam.time
+
+                    div
+                        a(class="btn btn-primary mt-2" onclick=`delete_exam("${exam._id}")`) Delete Exam
+    script.
+        function number_key(evt) { 
+            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode < 48 || ASCIICode > 57){
+                return false;
+            }
+            return true;
+        } 
+        const form = document.querySelector('form');
+        const dateError = document.querySelector('.date.error');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = (form.name.value).toLowerCase();
+            let exam_date = form.date.value;
+            exam_date = exam_date.trim().split('/').reverse().join('/');
+            const date = new Date(exam_date).getTime();
+            const time = form.time.value;
+            const price = form.price.value;
+            const topper_prize = form.topper_prize.value;
+            const body = (form.body.value).toLowerCase();
+            
+
+            try{
+                const res = await fetch('/create-exam',{
+                    method: 'POST',
+                    body: JSON.stringify({name, date, time, price, topper_prize, body}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.errors){
+                    dateError.textContent = data.errors.date;
+                }
+                
+                if(data.exam){
+                    location.assign('/admin');
+                }
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        });
+
+
+        async function delete_exam(id){
+            try{
+                const res = await fetch('/delete-exam',{
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                
+                if(data.deletedCount === 1){
+                    location.assign('/admin');
+                }
+            }
+            catch (err){
+                console.log(err);
+            }
+        }           
+                        

@@ -1,0 +1,57 @@
+doctype html 
+html 
+    head 
+        title= title
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
+
+
+        link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap')
+        link(rel='stylesheet', href='/stylesheets/customBootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(src="https://kit.fontawesome.com/8607c2225d.js" crossorigin="anonymous")
+    body(style="color:black;")
+        div(class='container')
+            if admin || superuser
+                div.row 
+                    div.col-md-8
+                        if admin    
+                            h5.text-uppercase.mt-3 Welcome to  Administration Panel [#{admin.name}] 
+                        else if superuser 
+                            h5.text-uppercase.mt-3 superuser admininstration panel
+                    div.col-md-4.text-end
+                        if admin
+                            a(class="btn btn-primary ps-5 pe-5 mt-2 mb-2 text-uppercase" href="/admin-logout") Logout
+                        else if superuser 
+                            h6.text-uppercase.mt-2 Welcome superuser, #{superuser.name} 
+                            a(class="btn btn-primary ps-5 pe-5 mt-2 mb-2 me-2 text-uppercase" href="/superuser/home") home
+                            a(class="btn btn-primary ps-5 pe-5 mt-2 mb-2 text-uppercase" href="/superuser-logout") Logout
+            else            
+                h5.text-uppercase.pt-3 Welcome to  Administration Panel
+
+                
+        div(class='container')
+            div(class='row g-4')
+                div.border.border-info.mb-3(class='col-md-3 text-uppercase d-flex flex-column')
+                    a(class='btn btn-link w-100 mb-2 question_paper' style="text-align:left;" href='/admin/question-paper') 
+                        i(class="fa-solid fa-arrow-right-from-bracket pe-3")
+                            span.ps-2 Questions
+                    a(class='btn btn-link w-100 mb-2 registered_users' style="text-align:left;" href='/admin/registered-users') 
+                        i(class="fa-solid fa-arrow-right-from-bracket pe-3")
+                            span.ps-2 Registered Users
+                    a(class='btn btn-link w-100 mb-2 examinations' style="text-align:left;" href='/admin') 
+                        i(class="fa-solid fa-arrow-right-from-bracket pe-3")
+                            span.ps-2 Examinations 
+                    a(class='btn btn-link w-100 mb-2 user_examinations' style="text-align:left;" href='/admin/user-examinations') 
+                        ii(class="fa-solid fa-arrow-right-from-bracket pe-3")
+                            span.ps-2 User Examinations
+                    a(class='btn btn-link w-100 mb-2 user_responses' style="text-align:left;" href='/admin/user-responses') 
+                        i(class="fa-solid fa-arrow-right-from-bracket pe-3")
+                            span.ps-2 Users Responses
+                    a(class='btn btn-link w-100 mb-2 user_responses' style="text-align:left;" href='/admin/analysis') 
+                        i(class="fa-solid fa-arrow-right-from-bracket pe-3")
+                            span.ps-2 Analysis
+                div(class='col-md-9')
+                    block content
+        script(src='/javascripts/bootstrap.min.js' type='text/javascript')

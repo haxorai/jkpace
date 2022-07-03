@@ -1,0 +1,105 @@
+extends layout
+block content
+    div(class='container-xxl py-4 bg-white')
+        div(class='container')
+            div(class='row g-4')
+                div(class='col-md-6 d-flex flex-column align-items-center')
+                    img(class="flex-shrink-0 img-fluid" src="/images/registrationLogoi.png" alt="")
+                    h6(class="mb-3 text-uppercase") Already a registered applicant
+                    a(class="btn btn-primary" href="/login") Login Now
+
+                div(class='col-md-6 d-flex flex-column align-items-center')
+                    h5(class='text-uppercase') Register Now
+                    div(class="container")
+                        form(action='/signupforaccount')
+                            div(class="inputContainer")
+                                input(type="text" class="input" name="name" required)
+                                span(class="label") Name
+                                i(class="fa-solid fa-user iconRegister text-primary")
+                            div(class="inputContainer")
+                                input(type="text" class="input" name="email" required)
+                                span(class="label") Email
+                                i(class="fa-solid fa-at iconRegister text-primary")
+                            div.email.error
+                            div(class="inputContainer")
+                                input(type="tel" class="input" name="phone" required onkeypress="return number_key(event)")
+                                span(class="label") Phone
+                                i(class="fa-solid fa-phone iconRegister text-primary")
+                            div.phone.error
+                            div(class="inputContainer")
+                                input(type="password" class="input password" name="password" required)
+                                span(class="label") Password
+                                i(class="fa-solid fa-key iconRegister text-primary")
+                            div(class="inputContainer")
+                                input(type="password" class="input confirmPassword" name="confirmPassword" required)
+                                span(class="label") Confirm Password
+                                i(class="fa-solid fa-key iconRegister text-primary")
+                            div.password.error
+                            div.inputContainer 
+                                button(class="btn btn-primary w-100 py-2 mt-3 submitButton") Submit
+
+    script.
+        function number_key(evt) { 
+            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode < 48 || ASCIICode > 57){
+                return false;
+            }
+            return true;
+        } 
+        const form = document.querySelector('form');
+        const emailError = document.querySelector('.email.error');
+        const phoneError = document.querySelector('.phone.error');
+        const passwordError = document.querySelector('.password.error');
+        const password = document.querySelector('.input.password');
+        const confirmPassword = document.querySelector('.input.confirmPassword');
+        
+        password.addEventListener('focus', () => {
+            passwordError.textContent = '';
+        });
+        confirmPassword.addEventListener('focus', () => {
+            passwordError.textContent = '';
+        })
+        confirmPassword.addEventListener('focusout', () => {
+            if(form.password.value !== form.confirmPassword.value){
+                passwordError.textContent = 'The passwords do not match.';
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // reset error
+            emailError.textContent = '';
+            phoneError.textContent = '';
+            passwordError.textContent = '';
+
+            //get form field values
+
+            const name = (form.name.value).toLowerCase();
+            const email = (form.email.value).toLowerCase();
+            const phone = form.phone.value;
+            const password = form.password.value;
+            
+
+            try{
+                const res = await fetch('/signupforaccount',{
+                    method: 'POST',
+                    body: JSON.stringify({name, email, phone, password}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.errors){
+                    emailError.textContent = data.errors.email;
+                    phoneError.textContent = data.errors.phone;
+                    passwordError.textContent = data.errors.password;
+                }
+                
+                if(data.user){
+                    location.assign('/account/'+data.user);
+                }
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        });

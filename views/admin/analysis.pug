@@ -1,0 +1,60 @@
+extends admin_layout 
+block content 
+    div.container.border.border-info.mb-3#delete_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Result  analysis of an examination
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Examination Name: 
+            div.col-md-9.mt-2
+                form(id="form_exam" action="/search-exam-details")
+                    div.w-75
+                        select(id="exams" class="form-select text-uppercase" aria-label="examinations")
+                            each name in exam_names
+                                option(value=name)= name 
+                    div
+                        button(type="submit" class="btn btn-primary w-75 mt-3 mb-3") 
+                            i(class="fa-solid fa-1")
+                            span.ps-2 Update Marks in Database
+                    div.updated_message.error.ps-0
+                div
+                    button(type="submit" class="btn btn-primary w-75 mb-3" onclick="download_analysis_sheet()") 
+                        i(class="fa-solid fa-2") 
+                        span.ps-2 Download Analysis Sheet 
+    script.
+        const form_exam = document.querySelector('#form_exam'); 
+        const updatedError = document.querySelector('.updated_message.error');
+        form_exam.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const select = document.querySelector('#exams');
+            const exam_name = select.value;
+            try{
+                const res = await fetch('/search-exam-details',{
+                    method: 'POST',
+                    body: JSON.stringify({exam_name}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.success){
+                    updatedError.innerHTML = `<h6 class="text-primary">${data.success}</h6>`;
+                }
+                if(data.error){
+                    updatedError.textContent = data.error;
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })
+
+        function download_analysis_sheet(){
+            const select = document.querySelector('#exams');
+            const exam_name = select.value;
+            try{
+                location.assign('/download-analysis-sheet/'+exam_name);
+            }
+            catch(err){
+                console.log(err);
+            }
+        }

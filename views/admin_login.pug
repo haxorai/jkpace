@@ -1,0 +1,211 @@
+doctype html
+html 
+    head 
+        title Login | Admin Portal
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
+
+
+        link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap')
+        link(rel='stylesheet', href='/stylesheets/customBootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(src="https://kit.fontawesome.com/8607c2225d.js" crossorigin="anonymous")
+    body 
+        div.container#login_section
+            div.row.d-flex.flex-row.justify-content-center.align-items-center.min-vh-100
+                div.col-md-6.text-center
+                    img(class="flex-shrink-0 img-fluid" src="/images/loginLogoi.png" alt="")
+                    h6.text-uppercase.mt-2 Admin Login Portal 
+                div.col-md-6.text-center
+                    div(class="container")
+                        form(action='/admin-login-post')
+                            div(class="inputContainer")
+                                input(type="text" class="input" name="email" required)
+                                span(class="label") Email
+                                i(class="fa-solid fa-at iconRegister text-primary")
+                            div.email.error
+                            div(class="inputContainer")
+                                input(type="password" class="input" name="password" required)
+                                span(class="label") Password
+                                i(class="fa-solid fa-key iconRegister text-primary")
+                            div.password.error
+                            div.inputContainer 
+                                button(class="btn btn-primary w-100 py-2 mt-3 submitButton") Submit 
+                        div.text-center
+                            button(class="btn btn-link mt-3 mb-2 text-uppercase" onclick = "forgot_password()") forgot password
+        div.container#forgot_password_section(style="display:none;")
+            div.row.d-flex.flex-row.justify-content-center.align-items-center.min-vh-100 
+                div.col-md-3 
+                div.col-md-6.text-center
+                    div.container#phone_section
+                        h6.text-uppercase.mt-2 Forgot password portal
+                        form(id="form_phone" action="/search-admin-phone")
+                            div(class="inputContainer")
+                                input(type="tel" class="input" name="phone" required onkeypress="return number_key(event)")
+                                span(class="label") Phone Number
+                                i(class="fa-solid fa-phone iconRegister text-primary")
+                            div.text-start.phone.error
+                            div.inputContainer 
+                                button(class="btn btn-primary w-100 mt-2 submitButton") Submit
+                    div.container#password_section(style="display:none;")
+                        h6.text-uppercase.mt-2 New password portal
+                        form(id="form_password" action='/update-admin-password')
+                            div(id="otp_section" class="inputContainer")
+                                input(type="tel" class="input otp" name="otp" required onkeypress="return number_key(event)")
+                                span(class="label") OTP
+                                i(class="fa-solid fa-key iconRegister text-bold text-primary")
+                            div.text-start.otp.error
+                            div(class="inputContainer")
+                                input(type="password" class="input password1" name="password1" required)
+                                span(class="label") Password
+                                i(class="fa-solid fa-lock iconRegister text-primary")
+                            div(class="inputContainer")
+                                input(type="password" class="input" name="confirm_password1" required)
+                                span(class="label") Confirm Password
+                                i(class="fa-solid fa-lock iconRegister text-primary")
+                            div.text-start.password1.error
+                            div.inputContainer 
+                                button(class="btn btn-primary w-100 mt-2 submitButton") Submit 
+                            div.text-start.mt-3.update_message.error
+                div.col-md-3
+        
+        script.
+            function number_key(evt) { 
+                let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+                if (ASCIICode < 48 || ASCIICode > 57){
+                    return false;
+                }
+                return true;
+            } 
+            var otp = null;
+            var phone = ''; 
+            const form = document.querySelector('form');
+            const emailError = document.querySelector('.email.error');
+            const passwordError = document.querySelector('.password.error');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // reset errors
+                emailError.textContent = '';
+                passwordError.textContent = '';
+                // get values
+                const email = (form.email.value).toLowerCase();
+                const password = form.password.value;
+                try{
+                    const res = await fetch('/admin-login-post', {
+                        method: 'POST',
+                        body: JSON.stringify({email, password}),
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    const data = await res.json();
+                    if(data.errors){
+                        emailError.textContent = data.errors.email;
+                        passwordError.textContent = data.errors.password;
+                    }
+                    if(data.admin){
+                        location.assign('/admin');
+                    }
+                }
+                catch(err){
+                    console.log(err);
+                }
+            });
+
+            function forgot_password() {
+            document.querySelector('#login_section').style.display = 'none';
+            document.querySelector('#forgot_password_section').style.display = 'block';
+            }
+
+            const form_phone = document.querySelector('#form_phone');
+            const phoneError = document.querySelector('.phone.error');
+
+            form_phone.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // reset errors
+                phoneError.textContent = '';
+                // get values
+                phone = (form_phone.phone.value).trim();
+                try{
+                    const res = await fetch('/search-admin-phone', {
+                        method: 'POST',
+                        body: JSON.stringify({phone}),
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    const data = await res.json();
+                    if(data.error){
+                        phoneError.textContent = data.error;
+                    }
+                    if(data.admin_id){
+                        otp = data.otp;
+                        document.querySelector('#phone_section').style.display = 'none';
+                        document.querySelector('#password_section').style.display = 'block';
+                    }
+                }
+                catch(err){
+                    console.log(err);
+                }
+            });
+            
+            const form_password = document.querySelector('#form_password');
+            const password1Error = document.querySelector('.password1.error');
+            const otpError = document.querySelector('.otp.error');
+            const otp_field = document.querySelector('.input.otp');
+            const password1_field = document.querySelector('.input.password1');
+
+            password1_field.addEventListener('focus', () => {
+                password1Error.textContent = '';
+            });
+            otp_field.addEventListener('focus', () => {
+                otpError.textContent = '';
+            });
+            otp_field.addEventListener('focusout', () => {
+                const user_otp = parseInt((document.querySelector('.input.otp').value).trim());
+                if( otp === user_otp ){
+                    otpError.innerHTML = `<i class=" text-primary fa-solid fa-circle-check"><span class="ms-2">Verified</span></i>`;
+                    document.querySelector('#otp_section').style.display = 'block';
+                }
+                else{
+                    otpError.textContent = 'The OTP entered is not correct.'
+                }
+            });
+
+            
+            
+            form_password.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // get values
+                const user_otp = parseInt((form_password.otp.value).trim());
+                const password = (form_password.password1.value).trim();
+                const confirm_password = (form_password.confirm_password1.value).trim();
+                
+                if(password === confirm_password && user_otp === otp){
+                    try{
+                        const res = await fetch('/update-admin-password', {
+                            method: 'PUT',
+                            body: JSON.stringify({phone, password}),
+                            headers: {'Content-Type': 'application/json'}
+                        });
+                        const data = await res.json();
+                        if(data.success){
+                            document.querySelector('.update_message.error').innerHTML = `<span class=text-primary>${data.success}</span>`;
+                            const timer = setInterval(() => {
+                                location.assign('/admin-login');
+                                clearInterval(timer); 
+                            },1500)
+                            
+                        }
+                        if(data.error){
+                            document.querySelector('.update_message.error').textContent = data.error;
+                        }
+                    }
+                    catch(err){
+                        console.log(err);
+                    }
+                }
+                else{
+                    password1Error.textContent = 'The passwords do not match';
+                }
+            });
+            
+            

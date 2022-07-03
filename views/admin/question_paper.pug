@@ -1,0 +1,249 @@
+extends admin_layout 
+block content
+    div.container.border.border-info.mb-3#search_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Update  answer of a particular questiion
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Question Number: 
+            div.col-md-9.mt-2
+                form(id="search" action="/search-question")
+                    div
+                        input(type="tel" name="question_number" class="w-75" onkeypress="return number_key(event)")
+                    div.question_number.error.mt-2.ps-0
+                    div
+                        button(type="submit" class="btn btn-primary w-75 text-uppercase mt-1 mb-3") Search 
+    div.container.border.border-info.mb-3#delete_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Delete a particular questiion
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Question Number: 
+            div.col-md-9.mt-2
+                form(id="form_delete" action="/delete-question")
+                    div
+                        input(type="tel" name="question_number_df" class="w-75" onkeypress="return number_key(event)")
+                    div.question_number_df.error.mt-2.ps-0
+                    div
+                        button(type="submit" class="btn btn-primary w-75 text-uppercase mt-1 mb-3") Delete 
+                    div.deleted_message.error.ps-0
+    
+    div(class="container mb-3 border border-info" id="fetched_details")
+
+    div(class="container d-flex flex-column border border-info mb-3")
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Add a new question to the database
+        div.ps-3.mt-2 Number of questions already in database = 
+            span(style="color:red; font-weight:bold")= count
+        div.row.d-flex.flex-row
+            each number in question_numbers   
+                div.col.text-center.p-2.m-2.border.border-info= number
+        form(id="add" action='/question-post')
+            div(class="inputContainer")
+                input(type="tel" class="input" name="number" required onkeypress="return number_key(event)")
+                span(class="label text-uppercase") Number
+                i(class="fa-solid fa-hashtag iconRegister text-primary")
+            div.number.error
+            div(class="inputContainer")
+                input(type="text" class="input" name="question_top" required)
+                span(class="label text-uppercase") Question Top
+                i(class="fa-solid fa-question iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="option1" required)
+                span(class="label text-uppercase") Option 1
+                i(class="fa-solid fa-1 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="option2" required)
+                span(class="label text-uppercase") Option 2
+                i(class="fa-solid fa-2 iconRegister text-primary")
+        
+            div(class="inputContainer")
+                input(type="text" class="input" name="option3" required)
+                span(class="label text-uppercase") Option 3
+                i(class="fa-solid fa-3 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="option4" required)
+                span(class="label text-uppercase") Option 4
+                i(class="fa-solid fa-4 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="question_bottom" required)
+                span(class="label text-uppercase") Question Bottom
+                i(class="fa-solid fa-question iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="answer1" required)
+                span(class="label text-uppercase") Answer 1
+                i(class="fa-solid fa-1 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="answer2" required)
+                span(class="label text-uppercase") Answer 2
+                i(class="fa-solid fa-2 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="answer3" required)
+                span(class="label text-uppercase") Answer 3
+                i(class="fa-solid fa-3 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="answer4" required)
+                span(class="label text-uppercase") Answer 4
+                i(class="fa-solid fa-4 iconRegister text-primary")
+            
+            div(class="inputContainer")
+                input(type="text" class="input" name="answer" required)
+                span(class="label text-uppercase") Answer
+                i(class="fa-solid fa-a iconRegister text-primary")
+            
+            
+            div.inputContainer.mb-3 
+                button(class="btn btn-primary w-100 mt-2  submitButton") Submit
+
+    script.
+        function number_key(evt) { 
+            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode < 48 || ASCIICode > 57){
+                return false;
+            }
+            return true;
+        }
+        const form_add = document.querySelector('#add');
+        const numberError = document.querySelector('.number.error');
+        form_add.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // reset error
+            numberError.textContent = '';
+
+            //get form field values
+
+            const number = parseInt((form_add.number.value).trim());
+            const question_top = (form_add.question_top.value).trim();
+            const option1 = (form_add.option1.value).trim();
+            const option2 = (form_add.option2.value).trim();
+            const option3 = (form_add.option3.value).trim();
+            const option4 = (form_add.option4.value).trim();
+            const question_bottom = (form_add.question_bottom.value).trim();
+            const answer1 = (form_add.answer1.value).trim();
+            const answer2 = (form_add.answer2.value).trim();
+            const answer3 = (form_add.answer3.value).trim();
+            const answer4 = (form_add.answer4.value).trim();
+            const answer = (form_add.answer.value).trim();
+
+            try{
+                const res = await fetch('/question-post',{
+                    method: 'POST',
+                    body: JSON.stringify({number,question_top, option1, option2, option3, option4, question_bottom, answer1, answer2, answer3, answer4, answer}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.errors){
+                    numberError.textContent = data.errors.number;
+                }
+                
+                if(data.question){
+                    location.assign('/admin/question-paper');
+                }
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        });
+
+        const form_search = document.querySelector('#search');
+        const question_numberError = document.querySelector('.question_number.error');
+        const fetched_details = document.querySelector('#fetched_details');
+        fetched_details.style.display = 'none';
+        form_search.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            question_numberError.textContent = '';
+            fetched_details.style.display = 'none';
+            const question_number = parseInt((form_search.question_number.value).trim());
+            try{
+                const res = await fetch('/search-question',{
+                    method: 'POST',
+                    body: JSON.stringify({question_number}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.error){
+                    question_numberError.textContent = data.error;
+                }
+                
+                if(data.results){
+                    fetched_details.style.display = 'block';
+                    const markup =`
+                    #[h6(class="text-uppercase mt-2 ") Question Details]
+                    #[div(class="row border border-info mb-2") #[div(class="col-md-6 p-2 d-flex flex-column") #[span.border-bottom.border-info  QUESTION: ${data.results.number}] #[span.text-capitalize  ${data.results.question_top}] #[ol #[li ${data.results.option1}] #[li ${data.results.option2}] #[li ${data.results.option3}] #[li ${data.results.option4}]] #[span.text-capitalize  ${data.results.question_bottom}] #[ul #[li ${data.results.answer1}] #[li ${data.results.answer2}] #[li ${data.results.answer3}] #[li ${data.results.answer4}]]] #[div(class="col-md-6 p-2") #[form(id="form_update" action="/update-question") #[div(class="row d-flex flex-column") #[div(class="col") #[input(type="hidden" name="question_number" value="${data.results.number}")] #[h6 ANSWER :] #[input(type="text" name="updated_answer" class="w-100" value="${data.results.answer}")]] #[div(class="col") #[button(type="submit" class="btn btn-primary w-100 mb-2 mt-2 text-uppercase" onclick="update_answer()") Update] #[div(class="updated error")]]]]]]                        
+                    `;
+                    fetched_details.innerHTML = markup;       
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })
+
+        const form_delete = document.querySelector('#form_delete');
+        const quesError = document.querySelector('.question_number_df.error');
+        const deleted_message = document.querySelector('.deleted_message.error');
+        form_delete.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            quesError.textContent = '';
+            const question_number = parseInt((form_delete.question_number_df.value).trim());
+            console.log(question_number);
+            try{
+                const res = await fetch('/delete-question',{
+                    method: 'DELETE',
+                    body: JSON.stringify({question_number}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.deleted_count){
+                    deleted_message.textContent = 'Question successfully deleted';
+                    const timer = setInterval(() => {
+                        location.assign('/admin/question-paper');
+                        clearInterval(timer);
+                    },1000);
+                }
+                
+                if(data.error){
+                      quesError.textContent = data.error;     
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })
+
+        function update_answer(){
+            const form_update = document.querySelector('#form_update');
+            const updatedError = document.querySelector('.updated.error')
+            form_update.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const question_number = parseInt((form_update.question_number.value).trim());
+                const updated_answer = (form_update.updated_answer.value).trim();
+                try{
+                    const result = await fetch('/update-question',{
+                        method: 'PUT',
+                        body: JSON.stringify({question_number, updated_answer}),
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    const data = await result.json();
+                    if(data.success){
+                        updatedError.textContent = data.success;
+                    }
+                    if(data.error){
+                        updatedError.textContent = data.error;
+                    }
+                }
+                catch (err){
+                    console.log(err);
+                }
+            })
+        }
+        

@@ -1,0 +1,50 @@
+extends admin_layout 
+block content 
+    div.container.border.border-info.mb-3#search_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Search details of a registerd candidate
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Candidate's email: 
+            div.col-md-9.mt-2
+                form(id="search" action="/search-user")
+                    div
+                        input(type="text" name="email" class="w-75")
+                    div.email.error.mt-2.ps-0
+                    div
+                        button(type="submit" class="btn btn-primary w-75 text-uppercase mt-1 mb-3") Search 
+    div(class="container mb-3 border border-info" id="fetched_details")
+    script. 
+        const form_search = document.querySelector('#search');
+        const emailError = document.querySelector('.email.error');
+        const fetched_details = document.querySelector('#fetched_details');
+        fetched_details.style.display = 'none';
+        form_search.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            emailError.textContent = '';
+            fetched_details.style.display = 'none';
+            const email = form_search.email.value;
+            try{
+                const res = await fetch('/search-user',{
+                    method: 'POST',
+                    body: JSON.stringify({email}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.error){
+                    emailError.textContent = data.error;
+                }
+                
+                if(data.results){
+                    fetched_details.style.display = 'block';
+                    const markup =`
+                    #[h6(class="text-uppercase mt-2 ") Candidate Details]
+                    #[div(class="row border border-info mb-2") #[div(class="col-md-6 p-2") #[span.text-capitalize  NAME: ${data.results.name}]] #[div(class="col-md-6 p-2") #[span.text-capitalize PHONE: ${data.results.phone}]]]                        
+                    `;
+                    fetched_details.innerHTML = markup;   
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })

@@ -1,0 +1,191 @@
+extends layout 
+block content 
+    div(class="container-xxl py-4 bg-white")
+        div.container.border.border-info.py-2.my-3 
+            div.row.mt-2
+                div.col-md-6.text-start.d-flex.flex-row
+                    div.w-25 Name 
+                    input.w-75.mb-2.text-capitalize(type="text" id="user_name" value=user.name disabled)
+        
+                div.col-md-6.text-start.d-flex.flex-row
+                    div.w-25 Email    
+                    input.w-75.mb-2(type="text" id= "user_email" value=user.email disabled)
+            div.row.mt-2
+                div.col-md-6.text-start.d-flex.flex-row
+                    div.w-25 Phone 
+                    input.w-75.mb-2(type="tel" id="user_phone" value=user.phone disabled onkeypress= "return number_key(event)")
+                div.col-md-6.text-start
+                    button(class="btn btn-primary text-uppercase w-100 mb-2" id="edit_button" onclick="edit_profile()") Edit Profile
+                    button(class="btn btn-primary text-uppercase w-100 mb-2" id="update_button" onclick="update_profile()") Update Profile
+                div#phone_error.text-uppercase(style="color:red;")
+        div(class="container border border-info pt-3")
+          div(class="tab-content")
+            div(id="tab-1" class="tab-pane fade show p-0 active")
+                each exam in exam_details
+                    each user_exam, index in user_exams
+                        if exam.name === user_exam.exam
+                            div(class="job-item p-4 mb-4")
+                                div(class="row g-4")
+                                    div(class="col-sm-12 col-md-6 d-flex align-items-center wow animate__animated animate__fadeInUp" data-wow-delay="0.1s")
+                                        img(class="flex-shrink-0 img-fluid" src="/images/jkssb.png" alt="" style={width: '80px', height: '80px'})
+                                        div(class="text-start ps-4")
+                                            h5(class="mb-3 text-uppercase")= user_exam.exam
+                                                sup 
+                                                    i(class="fa-solid fa-indian-rupee-sign")
+                                                    span.text-primary= exam.price
+                                            
+                                            i(class="fa-regular fa-money-bill-1 text-primary me-2")
+                                            span(class='text-primary text-uppercase me-3') Topper Prize
+                                            i(class="fa-solid fa-indian-rupee-sign") 1,00,000
+                                            
+                                        
+                                    div(class="col-sm-12 col-lg-6 d-flex flex-column align-items-center align-items-md-end  wow animate__animated animate__slideInLeft" data-wow-delay= "0.1s")   
+                                        h6
+                                            i(class="far fa-calendar-alt text-primary me-2")
+                                            - const exam_date = parseInt(exam.date)
+                                            - let date = new Date(exam_date);
+                                            - const year = date.getFullYear();
+                                            - const month = date.getMonth() + 1;
+                                            - const day = date.getDate(); 
+                                            - date = day.toString()+"/"+month.toString()+"/"+year.toString()
+                                            span.me-3.text-uppercase=  'Date:'+ date 
+                                         
+                                            i(class="fa-regular fa-clock text-primary me-2") 
+                                            span.text-uppercase=  'Time:'+ exam.time
+                                        
+                                        
+                                        - var url = '/starter/'+ exam.name + '/'+date+'/' + exam.time
+                                        - let start_id = 'start'+index
+                                        a(id=start_id class="btn btn-primary ps-5 pe-5 mt-2 text-uppercase" href=url) Start Now
+                                        
+                                        - var url = '/response-sheet/'+user.id+'/'+ exam.name + '/'+date+'/' + exam.time
+                                        - let response_id = 'response'+index
+                                        a(id=response_id class="btn btn-primary ps-5 pe-5 mt-2 text-uppercase" href=url) Download Response Sheet
+                                        
+                                        span.count(style='display:none;')= user_exams.length
+                                        - let date_class = 'date'+index 
+                                        span(class=date_class style='display:none;')= date 
+                                        - let time_class = 'time'+index
+                                        span(class=time_class style='display:none;')= exam.time
+
+
+    script.
+        const name_field = document.querySelector('#user_name');
+        const phone_field = document.querySelector('#user_phone');
+        const phone_error = document.querySelector('#phone_error');
+        const email_field = document.querySelector('#user_email');
+        const edit_button = document.querySelector('#edit_button');
+        const update_button = document.querySelector('#update_button');
+        update_button.style.display = "none";
+        const count = parseInt(document.querySelector('.count').textContent);
+        for(let i=0; i<count; i++){
+            let response_btns = document.querySelectorAll('#response'+i);
+            response_btns.forEach((response_btn) => {
+                response_btn.style.display = 'none';
+            })
+        }
+        let dates = [];
+        let times = [];
+        for(let i=0; i<count; i++){
+            const date_fields = document.querySelectorAll('.date'+i);
+            date_fields.forEach((date_field) => {
+                dates.push(date_field.textContent);
+            })
+        }
+        
+        for(let i=0; i<count; i++){
+            const time_fields = document.querySelectorAll('.time'+i);
+            time_fields.forEach((time_field) => {
+                times.push((time_field.textContent).toLowerCase());
+            })
+        }
+
+        let date_time = [];
+        for(let i=0; i<count; i++){
+            let exam_date = dates[i].trim().split('/').reverse().join('/');
+            let time1 = times[i].trim();
+            if(time1.includes('pm')){
+                let time2 = time1.slice(0,time1.length-2);
+                let hours_minutes = time2.split(':');
+                let hours = (parseInt(hours_minutes[0].trim())+12).toString();
+                let minutes = hours_minutes[1].trim();
+                var exam_time = hours+':'+minutes+":"+"00"   
+            }
+            else{
+                let time2 = time1.slice(0,time1.length-2);
+                let hours_minutes = time2.split(':');
+                let hours = hours_minutes[0].trim();
+                let minutes = hours_minutes[1].trim();
+                var  exam_time = hours+':'+minutes+":"+"00"  
+            }
+            date_time.push(exam_date + " " + exam_time);
+        }
+        for(let i=0; i<count; i++){
+            let date1 = new Date(date_time[i]).getTime();
+            let date2 = new Date().getTime();
+            if(date1 < date2){
+                document.querySelector('#start'+i).style.display = 'none';
+                document.querySelector('#response'+i).style.display = 'block';
+            }
+        }
+
+        function edit_profile(){
+            try{
+                edit_button.style.display = "none";
+                name_field.disabled = false;
+                name_field.focus();
+                phone_field.disabled = false;
+                update_button.style.display = "block";
+            }
+            catch (err){
+                console.log(err);
+            }
+        }
+
+        function number_key(evt) { 
+            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode < 48 || ASCIICode > 57){
+                return false;
+            }
+            return true;
+        }
+        phone_field.addEventListener('focus', () => {
+            phone_error.textContent = '';
+        })
+        async function update_profile(){
+            const name = name_field.value.trim();
+            const phone = phone_field.value.trim();
+            const email = email_field.value;
+            if(name.length === 0){
+                phone_error.textContent = "Please enter your full real name"
+            }
+            else if(phone.length > 10){
+                phone_error.textContent = "The number of digits in your phone number is more than 10";
+            }
+            else if(phone.length < 10){
+                phone_error.textContent = "The number of digits in your phone number is less than 10";
+            }
+            else {
+                try{
+                    const response = await fetch('/update-user-profile',{
+                        method: 'PUT',
+                        body: JSON.stringify({name, phone, email}),
+                        headers: {'Content-Type': 'application/json'}
+                    });
+
+                    const data = await response.json();
+                    if(data.success){
+                        phone_error.textContent = data.success;
+                        update_button.style.display = "none";
+                        edit_button.style.display = "block";
+                    }
+                    if(data.error){
+                        phone_error.textContent = data.error;
+                    }
+                }
+                catch(err){
+                    phone_error.textContent = err.message;
+                }
+            }
+        }
+        

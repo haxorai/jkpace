@@ -1,0 +1,152 @@
+doctype html 
+html 
+    head 
+        title= exam_name 
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
+
+
+        link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap')
+        link(rel='stylesheet', href='/stylesheets/customBootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body(style="font-size:20px; color: black")
+        span.exam_name(style='display: none;')= exam_name
+        span.count(style='display: none;')= count
+        span.user_id(style='display:none;')= user.id
+        div.container.fluid
+            div.row 
+                div.col-md-2.d-flex.flex-md-column.flex-sm-row.justify-content-center.align-items-center 
+                    h5.minutes_timer.text-uppercase.pt-2(style={color: '#00B98E'})
+                    h5.separator.pt-2.ps-1.pe-1 :
+                    h5.seconds_timer.text-uppercase.pt-2(style={color:'red'})
+                div.col-md-10
+                    each question in questions
+                        - let panel_id = 'panel'+question.number;
+                        div(class="container-fluid bg-white" id=panel_id)      
+                            div(class="d-flex flex-column justify-content-center align-items-md-start min-vh-100")
+                                div.w-100.border.border-info.p-3
+                                    h6.text-uppercase.border-bottom.border-info question #{question.number}
+                                    p= question.question_top
+                                    ol 
+                                        li= question.option1
+                                        li= question.option2 
+                                        li= question.option3 
+                                        li= question.option4
+                                    p= question.question_bottom
+                                    div.form-check
+                                        input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer1)
+                                        label(class="form-check-label" for="option1")= question.answer1 
+                                    div.form-check
+                                        input(class="form-check-input" type="radio" name="question"+question.number id="option2" value=question.answer2)
+                                        label(class="form-check-label" for="option2")= question.answer2 
+                                    div.form-check
+                                        input(class="form-check-input" type="radio" name="question"+question.number id="option3" value=question.answer3)
+                                        label(class="form-check-label" for="option3")= question.answer3 
+                                    div.form-check
+                                        input(class="form-check-input" type="radio" name="question"+question.number id="option4" value=question.answer4)
+                                        label(class="form-check-label" for="option4")= question.answer4 
+                                    div.border-bottom.border-info
+                                    div.d-md-flex.flex-md-row.justify-content-md-end.align-items-sm-center.pt-2
+                                        if parseInt(question.number) !== count
+                                            button(id="next" class="btn btn-primary ps-5 pe-5 mt-2 me-2 text-uppercase" onclick='toggle_panels('+question.number+')') next question
+                                            button(id="clear" class="btn btn-warning ps-5 pe-5 mt-2 text-uppercase" onclick='clear_answer('+question.number+')') clear answer 
+                                        else
+                                            button(id="submit" class="btn btn-danger ps-5 pe-5 mt-2 me-2 text-uppercase" onclick='submit_answers('+question.number+')') submit answers 
+                                            button(id="clear" class="btn btn-warning ps-5 pe-5 mt-2 ms-2 text-uppercase" onclick='clear_answer('+question.number+')') clear answer                         
+        script(src='/javascripts/bootstrap.min.js' type='text/javascript')
+        script.
+            const exam_name = document.querySelector('.exam_name').textContent;
+            const count = parseInt(document.querySelector('.count').textContent);
+            const user_id = document.querySelector('.user_id').textContent;
+            const minutes_timer = document.querySelector('.minutes_timer');
+            const seconds_timer = document.querySelector('.seconds_timer');
+            var responses = [];
+            for(let i=2; i<=count; i++)
+            {
+                document.querySelector('#panel'+i).style.display = 'none';
+            }
+
+            const submit_responses = async () => {
+                try{
+                    const res = await fetch('/response-post',{
+                        method: 'POST',
+                        body: JSON.stringify(responses),
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    const data = await res.json();
+                    console.log(data);
+                    if(data.errors){
+                        console.log(data.errors);
+                    }
+                
+                    if(data){
+                        location.assign('/user-responses/'+exam_name+'/'+user_id)
+                    }
+
+                }
+                catch(err){
+                    console.log(err);
+                }
+            }
+
+            let start_time = new Date().getTime() + count*60*1000;
+            const timer = setInterval(() => {
+                let current_time = new Date().getTime();
+                let time_left = start_time - current_time;
+                let minutes = Math.floor((time_left % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((time_left % (1000 * 60)) / 1000);
+                    
+                minutes_timer.textContent = minutes.toString() + " minutes";
+                seconds_timer.textContent = seconds.toString() + " seconds";
+
+                if(time_left < 0){
+                    clearInterval(timer);
+                    minutes_timer.textContent = 'TIME UP';
+                    seconds_timer.textContent = '';
+                    submit_responses();
+                }
+            },1000);
+
+            
+            function clear_answer(id){
+                let radios = document.getElementsByName("question"+id);
+                let selected = Array.from(radios).find(radio => radio.checked);
+                if(selected){
+                    selected.checked = false;
+                }
+            }
+            function toggle_panels(id){
+                let radios = document.getElementsByName("question"+id);
+                let selected = Array.from(radios).find(radio => radio.checked);
+                if(selected){
+                    responses.push({'user_id': user_id, 'question_number': id, 'user_answer': selected.value});
+                }
+                else{
+                    responses.push({'user_id': user_id,'question_number': id, 'user_answer': 'not attempted'});
+                }
+                
+                const panel_pre = document.querySelector('#panel'+id);
+                if(panel_pre.style.display === 'none'){
+                    panel_pre.style.display = 'block';
+                }
+                else{
+                    panel_pre.style.display = 'none';
+                    const panel_next = document.querySelector('#panel'+((parseInt(id)+1).toString()))
+                    panel_next.style.display = 'block';
+                }
+                
+            }
+
+            function submit_answers(id){
+                let radios = document.getElementsByName("question"+id);
+                let selected = Array.from(radios).find(radio => radio.checked);
+                if(selected){
+                    responses.push({'user_id': user_id,'question_number': id, 'user_answer': selected.value});
+                }
+                else{
+                    responses.push({'user_id': user_id,'question_number': id, 'user_answer': 'not attempted'});
+                }
+                submit_responses();
+            }
+            

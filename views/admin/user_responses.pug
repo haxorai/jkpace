@@ -1,0 +1,81 @@
+extends admin_layout 
+block content 
+    div.container.border.border-info.mb-3#search_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Search responses of a candidate
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Candidate's email: 
+            div.col-md-9.mt-2
+                form(id="search" action="/search-responses")
+                    div
+                        input(type="text" name="email" class="w-75")
+                    div.email.error.mt-2.ps-0
+                    div
+                        button(type="submit" class="btn btn-primary w-75 text-uppercase mt-1 mb-3") Search 
+    div(class="container mb-3 border border-info" id="fetched_responses")
+    div.container.border.border-info.mb-3#delete_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Delete candidates responses of an examination
+        div.row 
+            div.col-md-6.mt-2
+                h6.text-uppercase(style="color:red; text-align: justify;") This action will delete everything from the responses collection. It will erase every record of every participating candidate. Only press the delete button if you are sure.
+            div.col-md-6.mt-2.text-center
+                button(id="delete_everything" class="btn btn-primary w-75 text-uppercase mt-3 mb-3") Delete everything 
+                div.deleted.error
+    script. 
+        const form_search = document.querySelector('#search');
+        const emailError = document.querySelector('.email.error');
+        const fetched_responses = document.querySelector('#fetched_responses');
+        fetched_responses.style.display = 'none';
+        const delete_everything = document.querySelector('#delete_everything');
+        const deletedError = document.querySelector('.deleted.error');
+        form_search.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            emailError.textContent = '';
+            fetched_responses.style.display = 'none';
+            const email = form_search.email.value;
+            try{
+                const res = await fetch('/search-responses',{
+                    method: 'POST',
+                    body: JSON.stringify({email}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.error){
+                    emailError.textContent = data.error;
+                }
+                
+                if(data.results){
+                    document.querySelector('#delete_section').style.display = 'none';
+                    fetched_responses.style.display = 'block';
+                    const markup =`
+                    #[h6(class="text-uppercase mt-2 ") Candidate Responses]
+                    ${data.results.map(result => `
+                        #[div(class="row border border-info mb-2") #[div(class="col-md-6 p-2") #[span.text-capitalize  QUESTION: ${result.question_number}]] #[div(class="col-md-6 p-2") #[span.text-capitalize ANSWER: ${result.user_answer}]]]                        
+                    `).join('')} 
+                    `;
+                    fetched_responses.innerHTML = markup;   
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })
+
+        delete_everything.addEventListener('click', async () =>{
+            try{
+                const result = await fetch('/delete-every-response',{
+                    method: 'DELETE'
+                });
+                const data = await result.json();
+                if(data.deletedCount){
+                    deletedError.textContent = `sucessfully deleted ${data.deletedCount} records`;
+                }
+                if(data.error){
+                    deletedError.textContent = data.error;
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
+        })

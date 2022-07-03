@@ -1,0 +1,123 @@
+extends layout 
+block content
+    div.container.mt-2(style="font-size:20px; color: black") 
+        div.row 
+            div.col-md-2 
+            div.col-md-8
+                div.row
+                    div.col-md-6
+                        span.pe-2 Exam: 
+                        span.text-capitalize.pe-5= exam_name
+                    div.col-md-6
+                        span.pe-2 Name:
+                        span.text-capitalize= user.name 
+            
+                div.row
+                    div.col-md-6
+                        span.pe-2 Phone:
+                        span.pe-5= user.phone
+                    div.col-md-6
+                        span.pe-2 Email:
+                        span= user.email
+            div.col-md-2
+    div.container(style="font-size:20px; color: black") 
+        div.row 
+            div.col-md-2 
+            div.col-md-8
+                - let correct_responses = 0
+                - let wrong_responses = 0
+                each question in questions_answers
+                    div.w-100.border.border-info.p-3.mt-3
+                        h6.text-uppercase.border-bottom.border-info question #{question.number}
+                        p= question.question_top
+                        ol 
+                            li= question.option1
+                            li= question.option2 
+                            li= question.option3 
+                            li= question.option4
+                        p= question.question_bottom
+                        h5= question.answer
+                        if question.answer === question.answer1 && question.user_answer === question.answer1
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer1 checked )
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer1} [Correct Answer] [Selected Answer]
+                            - correct_responses++
+                        else if question.answer === question.answer1
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer1 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer1} [Correct Answer]
+                        else if question.user_answer === question.answer1
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer1)
+                                label(class="form-check-label" for="option1" style="color: red;") #{question.answer1} [Selected Answer]
+                            - wrong_responses++
+                        else
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer1)
+                                label(class="form-check-label" for="option1") #{question.answer1}
+                        
+                        if question.answer === question.answer2 && question.user_answer === question.answer2
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer2 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer2} [Correct Answer] [Selected Answer]
+                            - correct_responses++
+                        else if question.answer === question.answer2
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer2 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer2} [Correct Answer]
+                        else if question.user_answer === question.answer2
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer2)
+                                label(class="form-check-label" for="option1" style="color: red;") #{question.answer2} [Selected Answer]
+                            - wrong_responses++
+                        else 
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer2)
+                                label(class="form-check-label" for="option1") #{question.answer2}
+
+                        if question.answer === question.answer3 && question.user_answer === question.answer3
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer3 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer3} [Correct Answer] [Selected Answer]
+                            - correct_responses++
+                        else if question.answer === question.answer3
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer3 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer3} [Correct Answer]
+                        else if question.user_answer === question.answer3
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer3)
+                                label(class="form-check-label" for="option1" style="color: red;") #{question.answer3} [Selected Answer]
+                            - wrong_responses++
+                        else 
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer3)
+                                label(class="form-check-label" for="option1") #{question.answer3}
+
+                        if question.answer === question.answer4 && question.user_answer === question.answer4
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer4 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer4} [Correct Answer] [Selected Answer]
+                            - correct_responses++
+                        else if question.answer === question.answer4
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer4 checked)
+                                label(class="form-check-label" for="option1" style="color: #00B98E;") #{question.answer4} [Correct Answer]
+                        else if question.user_answer === question.answer4
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer4)
+                                label(class="form-check-label" for="option1" style="color: red;") #{question.answer4} [Selected Answer]
+                            - wrong_responses++
+                        else 
+                            div.form-check
+                                input(class="form-check-input" type="radio" name="question"+question.number id="option1" value=question.answer4)
+                                label(class="form-check-label" for="option1") #{question.answer4}
+                div.border.border-info.mt-2.mb-2
+                    h6.text-uppercase.ms-2.mt-3.pb-2.border-bottom.border-info Candidate Test Analysis
+                    h6.text-uppercase.ms-2.text-primary Correct Responses:  #{correct_responses}
+                    h6.text-uppercase.ms-2(style="color:red;") Wrong Responses: #{wrong_responses}
+                    div.border-bottom.border-info
+                    - let final_score = correct_responses - (wrong_responses*0.25)
+                    h6.text-uppercase.ms-2.mt-2.mb-2 Final Score: #{final_score} 
+            div.col-md-2
+                 

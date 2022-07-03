@@ -1,0 +1,70 @@
+html
+    head
+        title Payment | StudyAndShine
+        meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0")
+        link(rel='stylesheet', href='/stylesheets/customBootstrap.min.css')
+    body
+        span.txnToken(hidden)= txnToken
+        span.price(hidden)= price 
+        span.orderId(hidden)= orderId
+        div.container#payment_spinner
+            div(class="d-flex flex-column justify-content-center align-items-center min-vh-100")
+                div(class="spinner-border text-info" style="width: 4rem; height: 4rem;" role="status")
+                h6(class=" text-primary mt-2 sr-only") Loading Payment Gateway
+        
+        script(src='/javascripts/bootstrap.min.js' type='text/javascript')
+        script.
+            const payment_spinner = document.querySelector('#payment_spinner');
+            const price = document.querySelector('.price').textContent;
+            const orderId = document.querySelector('.orderId').textContent;
+            const txnToken = document.querySelector('.txnToken').textContent;
+
+            function paytmCheckout(){
+                    var config = {
+                        root:"",
+                        flow: "DEFAULT",
+                        style: {
+                            themeBackgroundColor: "#00B98E",
+                            themeColor:"",
+                            headerBackgroundColor: "#00B98E",
+                            headerColor:"#FFFFFF",
+                            bodyColor: ""
+                        },
+                        data: {
+                            orderId: orderId,
+                            amount: price,
+                            token: txnToken,
+                            tokenType: "TXN_TOKEN"
+                        },
+                        merchant: {
+                            name: "STUDYANDSHINE",
+                            mid: "GkMUIV63233510360867"
+                        },
+                        handler: {
+                            notifyMerchant: (eventType, data) => {
+                            console.log("notify merchant function called");
+                            console.log("eventType => ", eventType);
+                            console.log("data => ", data);
+                            }
+                        }
+                    };
+                    if(window.Paytm && window.Paytm.CheckoutJS){
+                        window.Paytm.CheckoutJS.onLoad(() => {
+                            payment_spinner.style.display = 'none';
+                            window.Paytm.CheckoutJS.init(config)
+                                .then(() => {
+                                    window.Paytm.CheckoutJS.invoke();
+                                })
+                                .catch((error) => {
+                                    console.log("error => ",error);
+                                });
+                        });
+                    }
+            }
+        script(type="application/javascript" crossorigin="anonymous"  src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/GkMUIV63233510360867.js" onload="paytmCheckout()")
+        
+            
+        
+
+        
+        

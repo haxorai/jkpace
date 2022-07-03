@@ -1,0 +1,25 @@
+extends layout 
+block content
+    div.container 
+        div.row         
+            div.col-md-3 
+            div.col-md-6
+                h6.border-bottom.border-info.text-primary.mt-5.py-2= resultMessage
+                table.table 
+                    tbody 
+                        tr 
+                            td ORDER ID 
+                            td= orderId
+                        tr 
+                            td TRANSACTION AMOUNT
+                            td= txnAmount 
+                        tr 
+                            td BANK NAME
+                            td= bankName 
+                        tr 
+                            td BANK TRANSACTION ID
+                            td= bankTxnId
+                        tr 
+                            td TRANSACTION DATE
+                            td= txnDate
+            div.col-md-3 

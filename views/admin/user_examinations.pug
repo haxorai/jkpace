@@ -1,0 +1,101 @@
+extends admin_layout 
+block content
+    div.container.border.border-info.mb-3#search_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Search examinations of a candidate
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Candidate's email: 
+            div.col-md-9.mt-2
+                form(id="search" action="/search-exams")
+                    div
+                        input(type="text" name="email" class="w-75")
+                    div.email.error.mt-2.ps-0
+                    div
+                        button(type= "submit" class="btn btn-primary w-75 text-uppercase mt-1 mb-3") Search 
+    div.container.border.border-info.mb-3#delete_section
+        h6.text-uppercase.mt-2.pb-2.border-bottom.border-info Delete candidate details of an examination
+        div.row 
+            div.col-md-3.mt-2
+                span.text-uppercase Examination Name: 
+            div.col-md-9.mt-2
+                form(id="delete" action="/delete-details")
+                    div.w-75
+                        select(id="exams" class="form-select text-uppercase" aria-label="examinations")
+                            each name in exam_names
+                                option(value=name)= name 
+                    div
+                        button(type="submit" class="btn btn-primary w-75 text-uppercase mt-3 mb-3") Delete 
+    div.container.error.border.border-info.pt-2.mb-3#deleted_message
+    div(class="container mb-3 border border-info" id="fetched_exams") 
+    
+    script. 
+        const form_search = document.querySelector('#search');
+        const emailError = document.querySelector('.email.error');
+        const form_delete = document.querySelector('#delete');
+        const fetched_exams = document.querySelector('#fetched_exams');
+        fetched_exams.style.display = 'none';
+        const deleted_message = document.querySelector('#deleted_message');
+        deleted_message.style.display = 'none';
+
+        form_search.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            emailError.textContent = '';
+            fetched_exams.style.display = 'none';
+            const email = form_search.email.value;
+            try{
+                const res = await fetch('/search-exams',{
+                    method: 'POST',
+                    body: JSON.stringify({email}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.error){
+                    emailError.textContent = data.error;
+                }
+                
+                if(data.results){
+                    document.querySelector('#delete_section').style.display = 'none';
+                    fetched_exams.style.display = 'block';
+                    const markup =`
+                    #[h6(class="text-uppercase mt-2 ") Candidates and their examinations]
+                    ${data.results.map(result => `
+                        #[div(class="row border border-info mb-2") #[div(class="col-md-6 p-2 d-flex flex-column ") #[span.text-capitalize  NAME: ${result.username}] #[span EMAIL: ${result.email}]] #[div(class="col-md-6 p-2") #[span.text-capitalize EXAM: ${result.exam}]]]                        
+                    `).join('')} 
+                    `;
+                    fetched_exams.innerHTML = markup;   
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })
+
+
+        form_delete.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            deleted_message.textContent = '';
+
+            const select = document.querySelector('#exams');
+            const exam_name = select.value;
+            try{
+                const res = await fetch('/delete-details',{
+                    method: 'POST',
+                    body: JSON.stringify({exam_name}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await res.json();
+                if(data.deletedCount){
+                    deleted_message.style.display = 'block';
+                    deleted_message.textContent = `Succesfully deleted ${data.deletedCount} records`;
+                }
+                else{
+                    deleted_message.style.display = 'block';
+                    deleted_message.textContent = `No candidate is registerd with this examination`;
+                }      
+
+            }
+            catch(err){
+                console.log(err);
+            }
+        })

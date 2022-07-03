@@ -1,0 +1,357 @@
+:root {
+  --primary: #00B98E;
+  --secondary: #FF6922;
+  --light: #EFFDF5;
+  --dark: #0E2E50;
+}
+body{
+  background-color: white;
+}
+/*** Button ***/
+.btn {
+  transition: .5s;
+}
+
+.btn.btn-primary,
+.btn.btn-secondary {
+  color: #FFFFFF;
+}
+
+.btn-square {
+  width: 38px;
+  height: 38px;
+}
+
+.btn-sm-square {
+  width: 32px;
+  height: 32px;
+}
+
+.btn-lg-square {
+  width: 48px;
+  height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: normal;
+  border-radius: 50px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  color: #DDDDDD;
+}
+/*** Header ***/
+.green-border {
+    position: relative;
+    padding: 15px 0 15px 15px;
+    border-left: 15px solid var(--primary);
+}
+
+.green-border::before,
+.green-border::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 15px;
+    background: var(--primary);
+}
+
+.green-border::after {
+    top: 100%;
+    margin-top: -15px;
+}
+
+@media (min-width: 992px) {
+  .header {
+      margin-top: -120px;
+  }
+}
+/*** About ***/
+.about-img img {
+  position: relative;
+  z-index: 2;
+}
+
+.about-img::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  background: var(--primary);
+  transform: skew(20deg);
+  z-index: 1;
+}
+
+/*** Icon ***/
+.icon {
+  padding: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF !important;
+  border-radius: 50px;
+  /* border: 1px dashed var(--primary) !important; */
+}
+@media (max-width: 576px){ 
+  .icon {
+    padding: 15px;
+    width: 250px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF !important;
+    border-radius: 50px;
+    /* border: 1px dashed var(--primary) !important; */
+  }
+} 
+/*** Navbar ***/
+.nav-bar {
+  position: relative;
+  margin-top: 45px;
+  padding: 0 3rem;
+  transition: .5s;
+  z-index: 9999;
+}
+
+.nav-bar.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+
+.navbar {
+  box-shadow: 0 0 30px rgba(0, 0, 0, .08);
+}
+
+
+.navbar-light .navbar-nav .nav-link {
+  margin-right: 30px;
+  padding: 25px 0;
+  color: #FFFFFF;
+  font-size: 15px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active {
+  color: var(--primary);
+}
+
+@media (max-width: 991.98px) {
+  .nav-bar {
+      margin: 0;
+      padding: 0;
+  }
+
+  .navbar-light .navbar-nav .nav-link  {
+      margin-right: 0;
+      padding: 10px 0;
+  }
+
+  .navbar-light .navbar-nav {
+      border-top: 1px solid #EEEEEE;
+  }
+}
+
+.navbar-light .navbar-brand {
+  height: 75px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: var(--dark);
+  font-weight: 500;
+}
+/*** Job Listing ***/
+.nav-pills .nav-item .btn {
+  color: var(--dark);
+}
+
+.nav-pills .nav-item .btn:hover,
+.nav-pills .nav-item .btn.active {
+  color: #FFFFFF;
+}
+
+.job-item {
+  border: 1px solid transparent;
+  border-radius: 2px;
+  box-shadow: 0 0 45px rgba(0, 0, 0, .08);
+  transition: .5s;
+}
+
+.job-item:hover {
+  border-color: rgba(0, 0, 0, .08);
+  box-shadow: none;
+}
+
+/*** Footer ***/
+.footer .btn.btn-social {
+  margin-right: 5px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 35px;
+  transition: .3s;
+}
+
+.footer .btn.btn-social:hover {
+  color: var(--primary);
+  border-color: var(--light);
+}
+
+.footer .btn.btn-link {
+  display: block;
+  margin-bottom: 5px;
+  padding: 0;
+  text-align: left;
+  font-size: 15px;
+  font-weight: normal;
+  text-transform: capitalize;
+  transition: .3s;
+}
+
+.footer .btn.btn-link::before {
+  position: relative;
+  content: "\f105";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 10px;
+}
+
+.footer .btn.btn-link:hover {
+  letter-spacing: 1px;
+  box-shadow: none;
+}
+
+.footer .form-control {
+  border-color: rgba(255,255,255,0.5);
+}
+
+.footer .copyright {
+  padding: 25px 0;
+  font-size: 15px;
+  border-top: 1px solid rgba(256, 256, 256, .1);
+}
+
+.footer .copyright a {
+  color: var(--light);
+}
+
+.footer .footer-menu a {
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 1px solid rgba(255, 255, 255, .1);
+}
+
+.footer .footer-menu a:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  border-right: none;
+}
+
+/* Register and login form customization*/
+*:focus {
+  outline: none;
+}
+.inputContainer {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.input {
+  position: absolute;
+  top: 0px;
+  left: 25px;
+  height: 100%;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #AAA;
+  font-size: 16px;
+  padding: 0 20px;
+  outline: none;
+  background: none;
+  z-index: 1;
+}
+
+.label {
+  position: absolute;
+  top: 15px;
+  left: 40px;
+  padding: 0 4px;
+  background-color: white;
+  color: rebeccapurple;
+  font-size: 16px;
+  transition: 0.5s;
+  z-index: 0;
+}
+
+.iconRegister {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 0 3px;
+  background-color: white;
+  font-size: 16px;
+  z-index: 0;
+}
+
+.input:focus + .label {
+  top: -7px;
+  left: 15px;
+  z-index: 10;
+  font-size: 14px;
+  font-weight: 400;
+  color: #00B98E;
+}
+.input:focus {
+  border-bottom: 2px solid #00B98E;
+}
+.input:not(:focus):valid+ .label {
+  top: -7px;
+  left: 8px;
+  z-index: 10;
+  font-size: 14px;
+  font-weight: 400;
+}
+.submitButton {
+  position: absolute;
+  left: 25px;
+}
+/* form error fields */
+div.error {
+  color: red;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 20px;
+  padding-bottom: 8px;
+}
+/* timer customization */
+@media (min-width : 768px){
+  h5.minutes_timer {
+    padding-top: 0px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid black;
+  }
+  h5.separator {
+    display: none;
+  }
+  h5.seconds_timer {
+    padding-top: 0px;
+  }
+}
