@@ -20,7 +20,7 @@ router.get('/payment/:exam/:email/:price', requireAuth, (req, res) => {
         "mid": process.env.PAYTM_MID,
         "websiteName": "DEFAULT",
         "orderId": orderId,
-        "callbackUrl": "https://studyandshine.herokuapp.com/callback/"+exam+"/"+email,
+        "callbackUrl": "https://www.jkpace.com/callback/"+exam+"/"+email,
         "txnAmount": {
             "value": price,
             "currency": "INR",
