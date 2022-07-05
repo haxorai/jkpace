@@ -4,7 +4,7 @@ block content
     span.user(style={display: 'none'})= user
 
     if user 
-        div(class="container py-4 text-uppercase")
+        div(class="container py-4")
             div.row
                 div.col-md-3
                 div.col-md-6
@@ -15,13 +15,13 @@ block content
                                     i(class="fa-solid fa-book text-primary")
                                         span.ps-2 Exam
                                 div.col-9 
-                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' class='text-uppercase' name='exam' value=exam disabled)
+                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' class='text-capitalize' name='exam' value=exam disabled)
                             div.row.border-bottom.border-info.mb-3
                                 div.col-3
                                     i(class="fa-solid fa-user text-primary")
                                         span.ps-2 Name
                                 div.col-9 
-                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' class='text-uppercase' name='name' value=user.name disabled)
+                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' class='text-capitalize' name='name' value=user.name disabled)
                             div.row.border-bottom.border-info.mb-3
                                 div.col-3
                                     i(class="fa-solid fa-at text-primary")
