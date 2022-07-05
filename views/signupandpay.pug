@@ -10,26 +10,33 @@ block content
                 div.col-md-6
                     div.container
                         form(action='/signup')
-                            div.inputContainer
-                                input(type='text' class='input text-uppercase' name='exam' value=exam required)
-                                span(class="label") Exam
-                                i(class="fa-solid fa-book iconRegister text-primary")
-                            div(class="inputContainer")
-                                input(type="text" class="input text-uppercase" name="name" value=user.name required)
-                                span(class="label") Name
-                                i(class="fa-solid fa-user iconRegister text-primary")
-                            div(class="inputContainer")
-                                input(type="text" class="input" name="email" value=user.email required)
-                                span(class="label") Email
-                                i(class="fa-solid fa-at iconRegister text-primary")
-                            div.email.error
-                            div(class="inputContainer")
-                                input(type="tel" class="input price" name="price" value=price required onkeypress="return number_key(event)")
-                                span(class="label") Amount
-                                i(class="fa-solid fa-indian-rupee-sign iconRegister text-primary")
-                            div.price.error
-                            div.inputContainer 
-                                button(class="btn btn-primary w-100 py-2 mt-3 submitButton") Confirm and Pay
+                            div.row.border-bottom.border-info.mb-3
+                                div.col-3
+                                    i(class="fa-solid fa-book text-primary")
+                                        span.ps-2 Exam
+                                div.col-9 
+                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' class='text-uppercase' name='exam' value=exam disabled)
+                            div.row.border-bottom.border-info.mb-3
+                                div.col-3
+                                    i(class="fa-solid fa-user text-primary")
+                                        span.ps-2 Name
+                                div.col-9 
+                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' class='text-uppercase' name='name' value=user.name disabled)
+                            div.row.border-bottom.border-info.mb-3
+                                div.col-3
+                                    i(class="fa-solid fa-at text-primary")
+                                        span.ps-2 Email
+                                div.col-9 
+                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' name='name' value=user.email disabled)
+                            div.row.border-bottom.border-info.mb-3
+                                div.col-3
+                                    i(class="fa-solid fa-indian-rupee-sign text-primary")
+                                        span.ps-2 Price
+                                div.col-9 
+                                    input(style="width: 100%; background-color: #fff; border: none;" type='text' name='name' value=price disabled)
+                            div.row 
+                                div.col
+                                    button(class="btn btn-primary w-100  text-uppercase") Confirm and Pay
                 col-md-3
     else 
         div(class='container-xxl py-4 bg-white')
