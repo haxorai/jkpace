@@ -105,7 +105,7 @@ block content
                     passwordError.textContent = data.errors.password;
                 }
                 if(data.user){
-                    location.assign('/payment/'+exam+'/'+email+'/'+price_span.toString());
+                    location.assign('/payment/'+exam+'/'+data.user_name+'/'+email+'/'+price_span.toString());
                 }
             }
             catch(err){

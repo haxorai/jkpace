@@ -260,53 +260,26 @@ const loginandpay_get = (req, res) => {
     console.log(exam, price);
     res.render('loginandpay', { title: 'Login | StudyAndShine', exam, price });
 }
+
 const signup_post = async (req, res) => {
     const { exam, name, email, phone, password} = req.body;
-    if(phone === null && password === null){
-        try{
-            const userexam = await UserExam.create({
-                username: name,
-                email: email,
-                exam: exam,
-                marks: 0,
-                fee_paid: 'no'
-            });
-            res.status(201).json({user_id: userexam._id})
+    try {
+        const user = await User.create({
+            name, 
+            email, 
+            phone, 
+            password
+        });
+        if(user){
+            const token = createToken(user._id);
+            res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+            res.status(201).json({ user: user._id });
         }
-        catch (err){
-            const errors = handleErrors(err);
-            res.status(400).json({ errors });
-        }
-        
     }
-    else{
-        try {
-            const user = await User.create({
-                name, 
-                email, 
-                phone, 
-                password
-            });
-            if(user){
-                const userexam = await UserExam.create({
-                    username: name,
-                    email: email,
-                    exam: exam,
-                    marks: 0,
-                    fee_paid: 'no'
-                });
-                if(userexam){
-                    const token = createToken(user._id);
-                    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-                    res.status(201).json({ user: user._id });
-                }
-            }
-        }
-        catch (err) {
-            const errors = handleErrors(err);
-            res.status(400).json({ errors });
-        }
-    }   
+    catch (err) {
+        const errors = handleErrors(err);
+        res.status(400).json({ errors });
+    }  
 }
 
 const login_post = async (req, res) => {
@@ -315,18 +288,9 @@ const login_post = async (req, res) => {
     try {
         const user = await User.login(email, password);
         if(user){
-            const userexam = await UserExam.create({
-                username: user.name,
-                email: email,
-                exam: req.body.exam,
-                marks: 0,
-                fee_paid: 'no'
-            });
-            if(userexam){
-                const token = createToken(user._id);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-                res.status(200).json({ user: user._id });
-            }
+            const token = createToken(user._id);
+            res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+            res.status(200).json({ user: user._id, user_name: user.name }); 
         }
     }
     catch (err) {

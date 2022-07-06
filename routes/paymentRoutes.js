@@ -80,7 +80,6 @@ router.get('/payment/:exam/:name/:email/:price', requireAuth, (req, res) => {
 
 router.post('/callback/:exam/:name/:email', checkUser, (req, res) => {
     const { exam, name, email } = req.params;
-
     const callback_data = JSON.parse(JSON.stringify(req.body));
 
 
