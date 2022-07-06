@@ -16,39 +16,39 @@ html
                     a(id="starter" class="btn btn-primary ps-5 pe-5 mt-2 text-uppercase" href=url) Start Now
                 else 
                     h6.text-uppercase Link will get activated before 2 Minutes to examination
+                a(class="btn btn-primary ps-5 pe-5 mt-2 text-uppercase" href=url) Start Now
         script(src='/javascripts/bootstrap.min.js' type='text/javascript')
         script.
-            try{
-                const starter = document.querySelector('#starter');
-                const date = document.querySelector('.date').textContent;
-                const timer_field = document.querySelector('.timer');
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            });
+            const starter = document.querySelector('#starter');
+            const date = document.querySelector('.date').textContent;
+            const timer_field = document.querySelector('.timer');
+            
+            let count_down_date = new Date(date).getTime();
+            const timer = setInterval(() => {
+                let now = new Date().getTime();
+                let time_left = count_down_date - now;
+
+                let days = Math.floor(time_left / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((time_left % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((time_left % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((time_left % (1000 * 60)) / 1000);
+
+                let time_string = days.toString()+" days : " + hours.toString()+" hours : " + minutes.toString()+" minutes : " + seconds.toString()+" seconds";
                 
-                let count_down_date = new Date(date).getTime();
-                const timer = setInterval(() => {
-                    let now = new Date().getTime();
-                    let time_left = count_down_date - now;
-
-                    let days = Math.floor(time_left / (1000 * 60 * 60 * 24));
-                    let hours = Math.floor((time_left % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    let minutes = Math.floor((time_left % (1000 * 60 * 60)) / (1000 * 60));
-                    let seconds = Math.floor((time_left % (1000 * 60)) / 1000);
-
-                    let time_string = days.toString()+" days : " + hours.toString()+" hours : " + minutes.toString()+" minutes : " + seconds.toString()+" seconds";
-                    
-                    timer_field.textContent = time_string;
-            
-                    if(time_left > 57000 && time_left <  60000 ){
-                        document.location.reload(true);
-                    }
-                    if(time_left < 0){
-                        clearInterval(timer);
-                        starter.style.display = "none";
-                        timer_field.textContent = '';
-                        timer_field.textContent = "The bad news is time flies. The good news is you're the pilot. Good Luck Next Time";
-                    }
-                },1000);
-            }
-            catch (err){
-                console.log(err);
-            } 
-            
+                timer_field.textContent = time_string;
+        
+                if(time_left > 57000 && time_left <  60000 ){
+                    document.location.reload(true);
+                }
+                if(time_left < 0){
+                    clearInterval(timer);
+                    starter.style.display = "none";
+                    timer_field.textContent = '';
+                    timer_field.textContent = "The bad news is time flies. The good news is you're the pilot. Good Luck Next Time";
+                }
+            },1000);
+        
+        
