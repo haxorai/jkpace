@@ -14,7 +14,8 @@ html
         span.exam_name(style='display: none;')= exam_name
         span.count(style='display: none;')= count
         span.user_id(style='display:none;')= user.id
-        div.container.fluid
+        button#start_button.btn.btn-primary START NOW
+        div.container#questions_panel
             div.row 
                 div.col-md-2.d-flex.flex-md-column.flex-sm-row.justify-content-center.align-items-center 
                     h5.minutes_timer.text-uppercase.pt-2(style={color: '#00B98E'})
@@ -56,6 +57,28 @@ html
                                             button(id="clear" class="btn btn-warning ps-5 pe-5 mt-2 ms-2 text-uppercase" onclick='clear_answer('+question.number+')') clear answer                         
         script(src='/javascripts/bootstrap.min.js' type='text/javascript')
         script.
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            });
+            document.querySelector('#questions_panel').style.display = 'none';
+            const start_button = document.querySelector('#start_button');
+            start_button.addEventListener('click', () => {
+                
+                document.querySelector('#questions_panel').style.display = 'block';
+                document.querySelector('#questions_panel').requestFullscreen(); 
+            });
+            
+            document.querySelector('#questions_panel').addEventListener('fullscreenchange', () => {
+                if(document.fullscreenElement === null){
+                    submit_responses();
+                }
+            })
+
+
+
+            
+            
+
             const exam_name = document.querySelector('.exam_name').textContent;
             const count = parseInt(document.querySelector('.count').textContent);
             const user_id = document.querySelector('.user_id').textContent;
