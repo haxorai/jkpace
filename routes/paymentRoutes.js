@@ -9,8 +9,9 @@ const { requireAuth, checkUser } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.get('/payment/:exam/:email/:price', requireAuth, (req, res) => {
+router.get('/payment/:exam/:name/:email/:price', requireAuth, (req, res) => {
     const exam = req.params.exam;
+    const name = req.params.name;
     const email = req.params.email;
     const price = req.params.price;
     var paytmParams = {};
@@ -20,7 +21,7 @@ router.get('/payment/:exam/:email/:price', requireAuth, (req, res) => {
         "mid": process.env.PAYTM_MID,
         "websiteName": "DEFAULT",
         "orderId": orderId,
-        "callbackUrl": "https://www.jkpace.com/callback/"+exam+"/"+email,
+        "callbackUrl": "https://www.jkpace.com/callback/"+exam+"/"+name+"/"+email,
         "txnAmount": {
             "value": price,
             "currency": "INR",
@@ -77,8 +78,8 @@ router.get('/payment/:exam/:email/:price', requireAuth, (req, res) => {
     });
 })
 
-router.post('/callback/:exam/:email', checkUser, (req, res) => {
-    const { exam, email } = req.params;
+router.post('/callback/:exam/:name/:email', checkUser, (req, res) => {
+    const { exam, name, email } = req.params;
 
     const callback_data = JSON.parse(JSON.stringify(req.body));
 
@@ -129,13 +130,14 @@ router.post('/callback/:exam/:email', checkUser, (req, res) => {
                     if (response.body.resultInfo.resultStatus === "TXN_SUCCESS") {
                         resultMessage = "Transaction was successful";
 
-                        const userexam = await UserExam.findOneAndUpdate(
-                            {
-                                email: email,
+                        const userexam = await UserExam.create(
+                            {   
                                 exam: exam,
-                            },
-                            {fee_paid : 'yes'},
-                            {new: true}
+                                username: name,
+                                email: email,
+                                marks: 0,
+                                fee_paid : 'yes'
+                            }
                         );
 
                     }

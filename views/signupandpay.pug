@@ -4,7 +4,7 @@ block content
     span.user(style={display: 'none'})= user
 
     if user 
-        div(class="container py-4")
+        div(class="container py-4 text-uppercase")
             div.row
                 div.col-md-3
                 div.col-md-6
@@ -76,62 +76,28 @@ block content
         const price_span = parseInt(document.querySelector('.price').textContent)
         const form = document.querySelector('form');
         const emailError = document.querySelector('.email.error');
+        const phoneError = document.querySelector('.phone.error');
+        const passwordError = document.querySelector('.password.error');
+        const password = document.querySelector('.input.password');
+        const confirmPassword = document.querySelector('.input.confirmPassword');
         var exam = "";
         var name = "";
         var email = "";
         
         if(user_span){
-            const priceError = document.querySelector('.price.error');
-            const price_field = document.querySelector('.input.price');
-            price_field.addEventListener('focusout', () => {
-                const price = parseInt(price_field.value);
-                if(price < price_span){
-                    priceError.textContent = 'Nope! the price is fixed at '+price_span.toString();
-                }
-            });
-            form.addEventListener('submit', async (e) => {
+            form.addEventListener('submit', (e) => {
                 e.preventDefault();
-
-                // reset error
-                emailError.textContent = '';
-                priceError.textContent = '';
-
-                //get form field values
 
                 exam = (form.exam.value).trim().toLowerCase();
                 name = (form.name.value).trim().toLowerCase();
                 email = (form.email.value).trim().toLowerCase();
-                const phone = null;
-                const password = null;
-                
-
-                try{
-                    const res = await fetch('/signup',{
-                        method: 'POST',
-                        body: JSON.stringify({exam, name, email, phone,password}),
-                        headers: {'Content-Type': 'application/json'}
-                    });
-                    const data = await res.json();
-                    if(data.errors){
-                        console.log(data.errors);
-                    }
-                    
-                    if(data.user_id){
-                        location.assign('/payment/'+exam+'/'+email+'/'+price_span.toString());
-                    }
-
-                }
-                catch(err){
-                    console.log(err);
-                }
+              
+                location.assign('/payment/'+exam+'/'+name+'/'+email+'/'+price_span.toString());
+                  
             });
 
         }
         else{
-            const phoneError = document.querySelector('.phone.error');
-            const passwordError = document.querySelector('.password.error');
-            const password = document.querySelector('.input.password');
-            const confirmPassword = document.querySelector('.input.confirmPassword');
             password.addEventListener('focus', () => {
                 passwordError.textContent = '';
             });
@@ -176,7 +142,7 @@ block content
                     }
                     
                     if(data.user){
-                        location.assign('/payment/'+exam+'/'+email+'/'+price_span.toString());
+                        location.assign('/payment/'+exam+'/'+name+'/'+email+'/'+price_span.toString());
                     }
                     }
                     catch(err){
