@@ -10,12 +10,12 @@ html
         link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap')
         link(rel='stylesheet', href='/stylesheets/customBootstrap.min.css')
         link(rel='stylesheet', href='/stylesheets/style.css')
-    body(style="font-size:20px; color: black")
+    body(style="font-size:20px; color: black; overflow: auto;")
         span.exam_name(style='display: none;')= exam_name
         span.count(style='display: none;')= count
         span.user_id(style='display:none;')= user.id
         button#start_button.btn.btn-primary START NOW
-        div.container#questions_panel
+        div.container#questions_panel(onmousedown="return false" onselectstart="return false")
             div.row 
                 div.col-md-2.d-flex.flex-md-column.flex-sm-row.justify-content-center.align-items-center 
                     h5.minutes_timer.text-uppercase.pt-2(style={color: '#00B98E'})
@@ -60,19 +60,57 @@ html
             document.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
             });
+
+
+            function goFullScreen(element) {
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                }
+                else if (element.msRequestFullscreen) {
+                    if (element === document.documentElement) { //check element
+                        element = document.body; //overwrite the element (for IE)
+                        }
+                    element.msRequestFullscreen();
+                }
+                else if (element.mozRequestFullScreen) {
+                    element.mozRequestFullScreen();
+                }
+                else if (element.webkitRequestFullScreen) {
+                    element.webkitRequestFullScreen();
+                }
+                else {
+                    return; 
+                }
+            }
+            
+
+
             document.querySelector('#questions_panel').style.display = 'none';
             const start_button = document.querySelector('#start_button');
             start_button.addEventListener('click', () => {
                 
                 document.querySelector('#questions_panel').style.display = 'block';
-                document.querySelector('#questions_panel').requestFullscreen(); 
+                var entire_page = document.documentElement; //entire page (for Chrome/FF)
+                goFullScreen(entire_page);
             });
             
-            document.querySelector('#questions_panel').addEventListener('fullscreenchange', () => {
+            document.documentElement.addEventListener('fullscreenchange', () => {
                 if(document.fullscreenElement === null){
+                    clearInterval(timer);
+                    document.querySelector('#questions_panel').style.display = 'none';
                     submit_responses();
                 }
             })
+
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'F12' || e.keyCode === 123){
+                    e.preventDefault();
+                }
+                else if ((e.ctrlKey && e.shiftKey && e.key === 'I' || e.keyCode === 73) || (e.ctrlKey && e.shiftKey && e.key === 'J' || e.keyCode  === 74)) {
+                    e.preventDefault();
+                }
+            })
+
 
 
 
