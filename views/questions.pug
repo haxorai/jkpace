@@ -61,8 +61,16 @@ html
                 e.preventDefault();
             });
 
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'F12' || e.keyCode === 123){
+                    e.preventDefault();
+                }
+                else if ((e.ctrlKey && e.shiftKey && e.key === 'I' || e.keyCode === 73) || (e.ctrlKey && e.shiftKey && e.key === 'J' || e.keyCode  === 74)) {
+                    e.preventDefault();
+                }
+            });
 
-            function goFullScreen(element) {
+            function fullscreen(element) {
                 if (element.requestFullscreen) {
                     element.requestFullscreen();
                 }
@@ -91,8 +99,9 @@ html
                 
                 document.querySelector('#questions_panel').style.display = 'block';
                 var entire_page = document.documentElement; //entire page (for Chrome/FF)
-                goFullScreen(entire_page);
+                fullscreen(entire_page);
             });
+            
             
             document.documentElement.addEventListener('fullscreenchange', () => {
                 if(document.fullscreenElement === null){
@@ -100,21 +109,7 @@ html
                     document.querySelector('#questions_panel').style.display = 'none';
                     submit_responses();
                 }
-            })
-
-            document.addEventListener('keydown', (e) => {
-                if(e.key === 'F12' || e.keyCode === 123){
-                    e.preventDefault();
-                }
-                else if ((e.ctrlKey && e.shiftKey && e.key === 'I' || e.keyCode === 73) || (e.ctrlKey && e.shiftKey && e.key === 'J' || e.keyCode  === 74)) {
-                    e.preventDefault();
-                }
-            })
-
-
-
-
-            
+            });
             
 
             const exam_name = document.querySelector('.exam_name').textContent;

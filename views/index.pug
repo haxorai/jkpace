@@ -2,18 +2,19 @@ extends layout
 
 block content
   // Header Start
-  div(class="container-fluid header bg-white p-0")
-    div(class="row g-0 align-items-center flex-column-reverse flex-md-row")
-      div(class="col-md-6 p-5 mt-lg-5")
-        h1(class="display-5 wow animate__animated animate__fadeIn mb-4" data-wow-delay="0.1s") Find A 
-          span(class="text-primary") Perfect Government Job 
-          span To Live With Your Family
-        p(class="animate__animated animate__fadeIn mb-4 pb-2") Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea elitr.
-        a(href="" class="btn btn-primary py-3 px-5 me-3") Get Started
-      div(class="col-md-6 green-border  wow animate__animated animate_fadeIn" data-wow-delay="0.1s")
-        div(class="position-relative overflow-hidden p-5 pe-0")
-          img(class="img-fluid w-100" src="/images/carousel-1.jpg")
-  // Header End
+  div.container-xxl
+    div(class="container-fluid header bg-white p-0")
+      div(class="row g-0 align-items-center flex-column-reverse flex-md-row")
+        div(class="col-md-6 p-5 mt-lg-5")
+          h1(class="display-5 wow animate__animated animate__fadeIn mb-4" data-wow-delay="0.1s") Find A 
+            span(class="text-primary") Perfect Government Job 
+            span To Live With Your Family
+          p(class="animate__animated animate__fadeIn mb-4 pb-2") Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea elitr.
+          a(href="" class="btn btn-primary py-3 px-5 me-3") Get Started
+        div(class="col-md-6 green-border wow animate__animated animate_fadeIn" data-wow-delay="0.1s")
+          div(class="position-relative overflow-hidden p-5 pe-0")
+            img(class="img-fluid w-100" src="/images/job.jpg")
+    // Header End
   
   //About Start
   div(class="container-xxl py-5 bg-white")
@@ -21,7 +22,7 @@ block content
       div(class="row g-5 align-items-center")
         div(class="col-lg-6 wow animate__animated animate__fadeIn" data-wow-delay="0.1s")
           div(class="about-img position-relative overflow-hidden p-5 pe-0")
-            img(class="img-fluid w-100" src="/images/about.jpg")
+            img(class="img-fluid w-100" src="/images/exam_desktop_br.png")
         div(class="col-lg-6 wow animate__animated animate__fadeIn" data-wow-delay="0.5s")
           h1(class="mb-4") #1 Place To Find The Perfect Property
           p(class="mb-4") Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
@@ -51,8 +52,8 @@ block content
             li(class="nav-item me-0")
               a(class="btn btn-outline-primary" data-bs-toggle="pill" href="#jkpsc_exam") JKPSC
       
-      div(class="container-xxl py-4 bg-white")
-        div(class="container")
+  div(class="container-xxl py-4 bg-white")
+    div(class="container")
           div(class="tab-content")
             div(id="tab-1" class="tab-pane fade show p-0 active")
               each exam in exams
