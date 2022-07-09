@@ -117,7 +117,18 @@ body{
     border-radius: 50px;
     /* border: 1px dashed var(--primary) !important; */
   }
-} 
+}
+
+@media (max-width: 387px){
+  .header {
+    margin-top: -50px;
+  }
+  .icon {
+    width: 200px;
+    background: #FFFFFF !important;
+  }
+}
+
 /*** Navbar ***/
 .nav-bar {
   position: relative;
