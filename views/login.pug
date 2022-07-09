@@ -18,13 +18,13 @@ block content
                                 i(class="fa-solid fa-key iconRegister text-primary")
                             div.password.error
                             div.inputContainer 
-                                button(class="btn btn-primary w-100 py-2 mt-3 submitButton") Submit 
+                                button(class="btn btn-primary text-uppercase w-100 py-2 mt-3 submitButton") Submit 
                         div.text-center
                             button(class="btn btn-link mt-3 mb-2 text-uppercase" onclick = "forgot_password()") forgot password
                 div(class='col-md-6 d-flex flex-column align-items-center')
                     img(class="flex-shrink-0 img-fluid" src="/images/loginLogoi.png" alt="")
                     h6(class="mb-3 text-uppercase") Already not a registered applicant
-                    a(class="btn btn-primary" href="/signup") Register Now
+                    a(class="btn btn-primary text-uppercase" href="/signup") Register Now
         div.container#forgot_password_section(style="display:none;")
             div.row 
                 div.col-md-3 
@@ -38,7 +38,7 @@ block content
                                 i(class="fa-solid fa-phone iconRegister text-primary")
                             div.text-start.phone.error
                             div.inputContainer 
-                                button(class="btn btn-primary w-100 mt-2 submitButton") Submit
+                                button(class="btn btn-primary text-uppercase w-100 mt-2 submitButton") Submit
                     div.container#password_section(style="display:none;")
                         h6.text-uppercase.mt-2 New password portal
                         form(id="form_password" action='/update-password')
@@ -57,7 +57,7 @@ block content
                                 i(class="fa-solid fa-lock iconRegister text-primary")
                             div.text-start.password1.error
                             div.inputContainer 
-                                button(class="btn btn-primary w-100 mt-2 submitButton") Submit 
+                                button(class="btn btn-primary text-uppercase w-100 mt-2 submitButton") Submit 
                             div.text-start.mt-3.update_message.error
                 div.col-md-3
     
