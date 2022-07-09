@@ -71,7 +71,7 @@ block content
         const form = document.querySelector('form');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
+            statusError.textContent = '';
             const name = form.name.value.trim();
             const email = form.email.value.trim();
             const subject = form.subject.value.trim();
