@@ -4,7 +4,7 @@ block content
     div(class="container-fluid header bg-white p-0")
         div(class="row g-0 align-items-center flex-column-reverse flex-md-row")
                 div(class="col-md-6 p-5 mt-lg-5")
-                    h1(class="display-5 animate__animated animate__fadeIn mb-4") Contact Us 
+                    h1(class="display-5 animate__animated animate__fadeIn mb-4") Contact Us
                     nav(aria-label="breadcrumb animated fadeIn")
                         ol(class="breadcrumb text-uppercase")
                             li(class="breadcrumb-item") 
@@ -13,13 +13,12 @@ block content
                                 a(href="#") Pages
                             li(class="breadcrumb-item text-body active" aria-current="page") Contact
                 div(class="col-md-6 animated fadeIn")
-                    img(class="img-fluid w-100" src="/images/headerLogo2.png" alt="")
+                    img(class="img-fluid" src="/images/headerLogo2.png" alt="")
     // Header End
     div(class="container-xxl py-5 bg-white")
             div(class="container")
                 div(class="text-center mx-auto mb-5 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s" style={maxWidth: '600px'})
-                    h1(class="mb-3") Contact Us
-                    p Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.
+                    h1(class="mb-2") Contact Us
                 div(class="row g-4")
                     div(class="col-12")
                         div(class="row gy-4")
@@ -28,45 +27,71 @@ block content
                                     div(class="d-flex align-items-center bg-white rounded p-3" style="border: 1px dashed rgba(0, 185, 142, .3)")
                                         div(class="icon me-3" style={width: '45px', height: '45px'})
                                             i(class="fa fa-map-marker-alt text-primary")
-                                        span 123 Street, New York, USA
+                                        span 193121(Pattan), Jammu and Kashmir
                             div(class="col-md-6 col-lg-4 wow animate__animated animate__fadeInDown" data-wow-delay="0.3s")
                                 div(class="bg-light rounded p-3")
                                     div(class="d-flex align-items-center bg-white rounded p-3" style="border: 1px dashed rgba(0, 185, 142, .3)")
                                         div(class="icon me-3" style={width: '45px', height: '45px'})
                                             i(class="fa fa-envelope-open text-primary")
-                                        span info@example.com
+                                        span jkpace.help@gmail.com
                             div(class="col-md-6 col-lg-4 wow animate__animated animate__fadeInDown" data-wow-delay="0.5s")
                                 div(class="bg-light rounded p-3")
                                     div(class="d-flex align-items-center bg-white rounded p-3" style="border: 1px dashed rgba(0, 185, 142, .3)")
                                         div(class="icon me-3" style={width: '45px', height: '45px'})
                                             i(class="fa fa-phone-alt text-primary")
-                                        span 012 345 678
+                                        span 01954295076
                     div(class="col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s")
-                        iframe(class="position-relative rounded w-100 h-100"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
-                            frameborder="0" style={minHeight: '400px', border:0} allowfullscreen="" aria-hidden="false"
-                            tabindex="0")
+                        img(class="img-fluid w-100" src="/images/contactPage.png")
                     div(class="col-md-6")
                         div(class="wow animate__animated animate__fadeInUp" data-wow-delay="0.5s")
-                            p(class="mb-4") The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. 
-                            a(href="https://htmlcodex.com/contact-form") Download Now
-                            form
+                            form(action="/contact-post" Method="POST")
                                 div(class="row g-3")
                                     div(class="col-md-6")
                                         div(class="form-floating")
-                                            input(type="text" class="form-control" id="name" placeholder="Your Name")
+                                            input(type="text " class="form-control text-capitalize" name="name" placeholder="Your Name")
                                             label(for="name") Your Name
                                     div(class="col-md-6")
                                         div(class="form-floating")
-                                            input(type="email" class="form-control" id="email" placeholder="Your Email")
+                                            input(type="email" class="form-control" name="email" placeholder="Your Email")
                                             label(for="email") Your Email
                                     div(class="col-12")
                                         div(class="form-floating")
-                                            input(type="text" class="form-control" id="subject" placeholder="Subject")
+                                            input(type="text" class="form-control" name="subject" placeholder="Subject")
                                             label(for="subject") Subject
                                     div(class="col-12")
                                         div(class="form-floating")
-                                            textarea(class="form-control" placeholder="Leave a message here" id="message" style={height: '150px'})
+                                            textarea(class="form-control" placeholder="Leave a message here" name="message" style={height: '150px'})
                                             label(for="message") Message
                                     div(class="col-12")
-                                        button(class="btn btn-primary w-100 py-3" type="submit") Send Message
+                                        button(class="btn btn-primary  text-uppercase w-100 py-3" type="submit") Send Message
+                                        div.ps-0.mt-2.status.error
+
+    script. 
+        const statusError = document.querySelector('.status.error');
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = form.name.value.trim();
+            const email = form.email.value.trim();
+            const subject = form.subject.value.trim();
+            const message = form.message.value.trim();
+
+            try{
+                const result = await fetch('/contact-post', {
+                    method: 'POST',
+                    body: JSON.stringify({name, email, subject, message}),
+                    headers: {'Content-Type':'application/json'}
+                });
+                const data  = await result.json();
+                if(data.success){
+                    statusError.textContent = data.success;
+                }
+                if(data.error){
+                    statusError.textContent = data.error;
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
+        });

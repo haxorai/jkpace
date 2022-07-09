@@ -1,7 +1,7 @@
 const Exam = require('../models/Exam');
 const Question = require('../models/Question');
 const Response = require('../models/Response');
-
+const Contact = require('../models/Contact');
 const PDFDocument = require('pdfkit');
 
 // handle errors function 
@@ -41,6 +41,27 @@ const about = (req, res) => {
 
 const contact = (req, res) => {
     res.render('contact', { title: 'Conact Us | StudyAndShine' });
+}
+
+const contact_post = async (req,res) => {
+    const {name, email, subject, message} = req.body;
+    try{
+        const contact = await Contact.create({
+            name, 
+            email, 
+            subject,
+            message
+        });
+        if(contact){
+            res.status(201).json({success: 'Message Sucessfully Recieved'});
+        }
+        else{
+            res.status(400).json({error: 'Error Receiving Message, Please try again.'});
+        }
+    }
+    catch(err){
+        console.log(err);
+    }
 }
 
 const starter_get  = (req, res) => {
@@ -320,6 +341,7 @@ module.exports = {
     index,
     about,
     contact,
+    contact_post,
     starter_get,
     questions_get,
     question_post,

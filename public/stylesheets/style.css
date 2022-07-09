@@ -106,7 +106,9 @@ body{
   background: #FFFFFF !important;
   border-radius: 40px;
 }
-@media (max-width: 576px){ 
+ 
+
+@media (max-width: 576px){
   .icon {
     padding: 15px;
     width: 250px;
@@ -117,7 +119,7 @@ body{
     border-radius: 50px;
     /* border: 1px dashed var(--primary) !important; */
   }
-}
+} 
 
 @media (max-width: 387px){
   .header {
