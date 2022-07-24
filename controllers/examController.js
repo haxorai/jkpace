@@ -43,6 +43,18 @@ const contact = (req, res) => {
     res.render('contact', { title: 'Conact Us | jkpace' });
 }
 
+const privacy_policy_get = (req, res) => {
+    res.render('privacyPolicy',{title:'Privacy Policy | jkpace'});
+}
+
+const terms_conditions_get = (req, res) => {
+    res.render('termsAndConditions', {title: 'Terms And Conditions'})
+}
+
+const faqs_get = (req, res) => {
+    res.render('faqs', {title: 'FAQs | jkpace'});
+}
+
 const contact_post = async (req,res) => {
     const {name, email, subject, message} = req.body;
     try{
@@ -144,18 +156,6 @@ const response_post = async (req, res) => {
     }
 }
 const user_responses_get = async (req, res) => {
-    /*
-    const user_id = req.params.user_id;
-    const responses = await Response.find({user_id});
-    const results = await Question.aggregate([{
-                            $lookup: {
-                            from: 'responses',
-                            localField: 'number',
-                            foreignField: 'question_number',
-                            as: 'user_response'
-                        }}]);
-    console.log(results[0].user_response[0].user_answer);
-    */
     const user_id = req.params.user_id;
     const exam_name = req.params.exam_name;
     try {
@@ -341,6 +341,9 @@ module.exports = {
     index,
     about,
     contact,
+    privacy_policy_get,
+    terms_conditions_get,
+    faqs_get,
     contact_post,
     starter_get,
     questions_get,
