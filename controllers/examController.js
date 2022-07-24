@@ -27,7 +27,7 @@ const index = async (req, res) => {
     try {
         const exams = await Exam.find().sort({date: 1});
         if (exams) {
-            res.render('index', { title: 'Homepage | StudyAndShine', exams });
+            res.render('index', { title: 'Homepage | jkpace', exams });
         }
     }
     catch (err) {
@@ -36,11 +36,11 @@ const index = async (req, res) => {
 }
 
 const about = (req, res) => {
-    res.render('about', { title: 'About Us | StudyAndShine' });
+    res.render('about', { title: 'About Us | jkpace' });
 }
 
 const contact = (req, res) => {
-    res.render('contact', { title: 'Conact Us | StudyAndShine' });
+    res.render('contact', { title: 'Conact Us | jkpace' });
 }
 
 const contact_post = async (req,res) => {
@@ -53,7 +53,7 @@ const contact_post = async (req,res) => {
             message
         });
         if(contact){
-            res.status(201).json({success: 'Message Sucessfully Recieved'});
+            res.status(201).json({success: 'Message Sucessfully Received'});
         }
         else{
             res.status(400).json({error: 'Error Receiving Message, Please try again.'});

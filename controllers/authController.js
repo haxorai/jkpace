@@ -48,7 +48,7 @@ const createToken = (id) => {
 
 // controller actions
 const signup_get = (req, res) => {
-    res.render('signup');
+    res.render('signup',{title:'Register | jkpace'});
 }
 const signupforaccount_post = async (req,res) => {
     const {name, email, phone, password} = req.body;
@@ -70,7 +70,7 @@ const account_get = async (req,res) => {
         const user = await User.findById(user_id);
         const user_exams = await UserExam.find({email: user.email, fee_paid: 'yes'});
         const exam_details = await Exam.find();
-        res.render('account', {user, user_exams, exam_details});
+        res.render('account', {title:'Account | jkpace', user, user_exams, exam_details});
     }
     catch (err){
         console.log(err);
@@ -79,7 +79,7 @@ const account_get = async (req,res) => {
 }
 
 const login_get = (req, res) => {
-    res.render('login');
+    res.render('login',{title: 'Login | jkpace'});
 }
 const loginforaccount_post = async (req,res) => {
     const { email, password } = req.body;
@@ -251,14 +251,14 @@ const update_superuser_password_put = async (req, res) => {
 const signupandpay_get = (req, res) => {
     const exam = req.params.exam;
     const price = req.params.price;
-    res.render('signupandpay',{ title: 'Registration | StudyAndShine', exam, price });
+    res.render('signupandpay',{ title: 'Register | jkpace', exam, price });
 }
 
 const loginandpay_get = (req, res) => {
     const exam = req.params.exam;
     const price = req.params.price;
     console.log(exam, price);
-    res.render('loginandpay', { title: 'Login | StudyAndShine', exam, price });
+    res.render('loginandpay', { title: 'Login | jkpace', exam, price });
 }
 
 const signup_post = async (req, res) => {
