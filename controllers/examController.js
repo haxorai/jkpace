@@ -55,6 +55,10 @@ const faqs_get = (req, res) => {
     res.render('faqs', {title: 'FAQs | jkpace'});
 }
 
+const refund_policy_get = (req, res) => {
+    res.render('refundPolicy', {title: 'Refund Policy | jkpace'});
+}
+
 const contact_post = async (req,res) => {
     const {name, email, subject, message} = req.body;
     try{
@@ -344,6 +348,7 @@ module.exports = {
     privacy_policy_get,
     terms_conditions_get,
     faqs_get,
+    refund_policy_get,
     contact_post,
     starter_get,
     questions_get,
