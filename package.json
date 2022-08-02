@@ -19,6 +19,7 @@
     "paytmchecksum": "^1.5.0",
     "pdfkit": "^0.13.0",
     "pug": "^3.0.2",
+    "razorpay": "^2.8.2",
     "validator": "^13.7.0",
     "wowjs": "^1.1.3"
   },
