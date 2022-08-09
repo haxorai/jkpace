@@ -21,7 +21,7 @@ router.get('/payment/:exam/:name/:email/:price', requireAuth, (req, res) => {
         "mid": process.env.PAYTM_MID,
         "websiteName": "DEFAULT",
         "orderId": orderId,
-        "callbackUrl": "https://www.jkpace.com/callback/"+exam+"/"+name+"/"+email,
+        "callbackUrl": "https://www.jkpace.net/callback/"+exam+"/"+name+"/"+email,
         "txnAmount": {
             "value": price,
             "currency": "INR",
